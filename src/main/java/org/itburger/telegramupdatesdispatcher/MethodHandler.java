@@ -2,7 +2,7 @@ package org.itburger.telegramupdatesdispatcher;
 
 import org.itburger.telegramupdatesdispatcher.annotations.*;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.neformat.telegramupdatesdispatcher.annotations.*;
+import org.itburger.telegramupdatesdispatcher.annotations.*;
 import org.itburger.telegramupdatesdispatcher.generics.AbstractBotUser;
 import org.itburger.telegramupdatesdispatcher.generics.LocaleService;
 import org.itburger.telegramupdatesdispatcher.generics.UserState;

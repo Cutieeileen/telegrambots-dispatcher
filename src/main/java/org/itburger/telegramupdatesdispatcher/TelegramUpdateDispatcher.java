@@ -7,9 +7,9 @@ import org.reflections.Reflections;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.neformat.telegramupdatesdispatcher.annotations.*;
+import org.itburger.telegramupdatesdispatcher.annotations.*;
 import org.itburger.telegramupdatesdispatcher.exceptions.TelegramMiddlewareException;
-import ru.neformat.telegramupdatesdispatcher.generics.*;
+import org.itburger.telegramupdatesdispatcher.generics.*;
 import org.itburger.telegramupdatesdispatcher.models.DefaultMiddlewareChain;
 
 import java.lang.annotation.Annotation;

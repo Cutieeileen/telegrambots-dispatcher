@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Главный диспетчер для маршрутизации Update-ов к нужным обработчикам.
+ * Main {@link org.telegram.telegrambots.meta.api.objects.Update Updates} router.
  */
 @Slf4j
 public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
@@ -94,6 +94,7 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
         sortHandlers();
     }
 
+    //Sort handlers by conditions priority
     private void sortHandlers() {
         List<MethodHandler> messageHandlers = handlers.getOrDefault(MessageHandler.class, new ArrayList<>());
 
@@ -101,19 +102,16 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
                 .sorted(Comparator.comparingInt((MethodHandler mh) -> {
                     int score = 0;
                     try {
-                        // если есть regex — большой приоритет
+
                         String regex = mh.getStringValue("regex");
                         if (regex != null && !regex.isEmpty()) score += 8;
 
-                        // локализованное значение
                         String locKey = mh.getStringValue("localizedValueKey");
                         if (locKey != null && !locKey.isEmpty()) score += 4;
 
-                        // простое value
                         String value = mh.getStringValue("value");
                         if (value != null && !value.isEmpty()) score += 2;
 
-                        // requiredStates (через аннотацию, как у вас было)
                         Annotation annotation = mh.getAnnotation();
                         if (annotation != null) {
                             try {
@@ -123,14 +121,12 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
                                     if (array.length > 0) score += 1;
                                 }
                             } catch (NoSuchMethodException ignore) {
-                                // аннотация может не иметь requiredStates — это нормально
+
                             }
                         }
                     } catch (Exception e) {
-                        // при ошибке оставляем score как есть и логируем
                         log.error("Error while computing MethodHandler score for sorting", e);
                     }
-                    // сортируем по убыванию score: поэтому возвращаем -score
                     return -score;
                 }))
                 .collect(Collectors.toList());
@@ -150,7 +146,6 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
                 try {
                     instance = applicationContext.getBean(clazz);
                 } catch (NoSuchBeanDefinitionException e) {
-                    // Бин не найден — создаём новый экземпляр вручную
                     try {
                         instance = clazz.getDeclaredConstructor().newInstance();
                     } catch (Exception ex) {

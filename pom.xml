@@ -6,7 +6,7 @@
 
     <groupId>org.itburger</groupId>
     <artifactId>telegrambots-dispatcher</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <name>TelegramBots Update Dispather</name>
     <url>https://github.com/Cutieeileen/telegrambots-dispatcher/</url>
@@ -50,6 +50,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.34</lombok.version>
         <reflections.version>0.10.2</reflections.version>
+        <jetbrains.annotations.version>24.1.0</jetbrains.annotations.version>
     </properties>
 
     <dependencyManagement>
@@ -68,6 +69,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains.annotations.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

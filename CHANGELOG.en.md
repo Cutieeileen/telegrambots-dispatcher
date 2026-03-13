@@ -9,3 +9,6 @@
 
 ## [1.0.4] - 2026-02-28
 - Highlighting RegExp syntax in the corresponding annotation fields in IntelliJ IDEA-based IDE's.
+
+## [1.0.5] - 2026-03-13
+- VideoHandler

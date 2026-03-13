@@ -60,6 +60,14 @@ public class MethodHandler {
 
             }
 
+            if (annotation instanceof VideoHandler && update.getMessage() != null && update.getMessage().hasVideo()){
+
+                if (!checkAccess(user)) return false;
+                if (!checkStates(user)) return false;
+                return true;
+
+            }
+
             if (annotation instanceof VoiceHandler && update.getMessage() != null && update.getMessage().hasVoice()){
 
                 if (!checkAccess(user)) return false;

@@ -180,6 +180,8 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
                 wantedClass = CommandHandler.class;
             }else if (update.getMessage().hasPhoto()){
                 wantedClass = PhotoHandler.class;
+            }else if (update.getMessage().hasVideo()){
+                wantedClass = VideoHandler.class;
             }else if (update.getMessage().hasDocument()){
                 wantedClass = DocumentHandler.class;
             }else if (update.getMessage().hasVoice()){
@@ -234,6 +236,7 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
                 annotation instanceof BusinessCallbackQueryHandler ||
                 annotation instanceof DocumentHandler ||
                 annotation instanceof PhotoHandler ||
+                annotation instanceof VideoHandler ||
                 annotation instanceof VoiceHandler ||
                 annotation instanceof AudioHandler ||
                 annotation instanceof SuccessfulPaymentHandler ||

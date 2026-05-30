@@ -2,6 +2,7 @@ package org.itburger.telegramupdatesdispatcher;
 
 import lombok.extern.slf4j.Slf4j;
 import org.itburger.telegramupdatesdispatcher.annotations.*;
+import org.itburger.telegramupdatesdispatcher.enums.SourceType;
 import org.itburger.telegramupdatesdispatcher.generics.*;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -175,7 +176,7 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
     public void dispatch(Update update, U user){
         Class wantedClass = null;
 
-        if (update.hasMessage() && update.getMessage().isUserMessage()){
+        if (update.hasMessage()){
             if (update.getMessage().isCommand()){
                 wantedClass = CommandHandler.class;
             }else if (update.getMessage().hasPhoto()){
@@ -193,7 +194,7 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
             }else {
                 wantedClass = MessageHandler.class;
             }
-        }else if (update.hasCallbackQuery() && update.getCallbackQuery().getMessage().isUserMessage()){
+        }else if (update.hasCallbackQuery()){
             wantedClass = CallbackQueryHandler.class;
         }else if (update.hasInlineQuery()){
             wantedClass = InlineQueryHandler.class;
@@ -203,7 +204,7 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
 
         for (MethodHandler handler : handlers.getOrDefault(wantedClass, new ArrayList<>())) {
             try {
-                if (handler.matches(update, user)) {
+                if (handler.matches(update, user, extractSourceType(update))) {
                     handler.invoke(update, user);
                     return;
                 }
@@ -254,4 +255,21 @@ public class TelegramUpdateDispatcher<U extends AbstractBotUser> {
             return update.getPreCheckoutQuery().getFrom().getId();
         return null;
     }
+
+    private SourceType extractSourceType(Update update) {
+
+        if (update.hasCallbackQuery()){
+            if (update.getCallbackQuery().getMessage().isUserMessage()) return SourceType.USER;
+            if (update.getCallbackQuery().getMessage().isGroupMessage()) return SourceType.GROUP;
+            if (update.getCallbackQuery().getMessage().isSuperGroupMessage())  return SourceType.SUPERGROUP;
+        }
+
+        if (update.hasMessage()){
+            if (update.getMessage().isUserMessage()) return SourceType.USER;
+            if (update.getMessage().isGroupMessage()) return SourceType.GROUP;
+            if (update.getMessage().isSuperGroupMessage())  return SourceType.SUPERGROUP;
+        }
+        return null;
+    }
+
 }

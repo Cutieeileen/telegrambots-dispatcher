@@ -1,6 +1,7 @@
 package org.itburger.telegramupdatesdispatcher;
 
 import org.itburger.telegramupdatesdispatcher.annotations.*;
+import org.itburger.telegramupdatesdispatcher.enums.SourceType;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.itburger.telegramupdatesdispatcher.annotations.*;
 import org.itburger.telegramupdatesdispatcher.generics.AbstractBotUser;
@@ -8,6 +9,7 @@ import org.itburger.telegramupdatesdispatcher.generics.LocaleService;
 import org.itburger.telegramupdatesdispatcher.generics.UserState;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -41,8 +43,12 @@ public class MethodHandler {
         throw new IllegalArgumentException("Handler method " + method + " must have LocaleService initialized.");
     }
 
-    public boolean matches(Update update, AbstractBotUser user) {
+    public boolean matches(Update update, AbstractBotUser user, SourceType source) {
         try {
+
+            if (!checkChatType(source)){
+                return false;
+            }
 
             if (annotation instanceof PreCheckoutQueryHandler && update.hasPreCheckoutQuery()) return true;
 
@@ -169,6 +175,24 @@ public class MethodHandler {
         // Проверяем совпадение по строковому идентификатору
         return Arrays.stream(requiredStates)
                 .anyMatch(id -> id.equals(userState.getId()));
+    }
+
+    private boolean checkChatType(SourceType sourceType) {
+
+        try {
+            Object o = annotation.annotationType().getMethod("sources")
+                    .invoke(annotation);
+
+            if (o instanceof SourceType[] sources) {
+                if (sourceType == null) return false;
+                return Arrays.asList(sources).contains(sourceType);
+            }else {
+                return true;
+            }
+
+        }catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e){
+            return true;
+        }
     }
 
     public Annotation getAnnotation(){

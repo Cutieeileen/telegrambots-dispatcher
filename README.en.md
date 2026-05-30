@@ -1,5 +1,7 @@
 # TelegramBots Dispatcher
 
+[![Maven](https://badges.mvnrepository.com/badge/org.itburger/telegrambots-dispatcher/badge.svg?label=Maven)](https://mvnrepository.com/artifact/org.itburger/telegrambots-dispatcher)
+
 [Русская версия](README.md)
 
 A library for convenient routing of Telegram bot updates using Java annotations.
@@ -24,7 +26,7 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>org.itburger</groupId>
     <artifactId>telegrambots-dispatcher</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.6</version>
 </dependency>
 ```
 

@@ -1,5 +1,7 @@
 # TelegramBots Dispatcher
 
+[![Maven](https://badges.mvnrepository.com/badge/org.itburger/telegrambots-dispatcher/badge.svg?label=Maven)](https://mvnrepository.com/artifact/org.itburger/telegrambots-dispatcher)
+
 [English version](README.en.md)
 
 Библиотека для удобной маршрутизации обновлений Telegram-ботов с использованием аннотаций Java.
@@ -24,7 +26,7 @@
 <dependency>
     <groupId>org.itburger</groupId>
     <artifactId>telegrambots-dispatcher</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.6</version>
 </dependency>
 ```
 

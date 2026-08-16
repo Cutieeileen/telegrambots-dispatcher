@@ -125,7 +125,7 @@ public class MethodHandler {
             boolean startsWith = getBooleanValue("startsWith");
             String value = getStringValue("value");
 
-            if (value.isEmpty() && annotation instanceof MessageHandler && requiredStates.length != 0) return true;
+            if (value.isEmpty() && annotation instanceof MessageHandler && requiredStates.length == 0) return true;
 
             if (textToMatch == null) return false;
             return startsWith ? textToMatch.startsWith(value) : textToMatch.equals(value);

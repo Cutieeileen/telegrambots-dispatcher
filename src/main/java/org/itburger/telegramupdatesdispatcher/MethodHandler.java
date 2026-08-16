@@ -62,6 +62,7 @@ public class MethodHandler {
 
                 if (!checkAccess(user)) return false;
                 if (!checkStates(user)) return false;
+                if (!checkSource(update)) return false;
                 return true;
 
             }
@@ -70,6 +71,7 @@ public class MethodHandler {
 
                 if (!checkAccess(user)) return false;
                 if (!checkStates(user)) return false;
+                if (!checkSource(update)) return false;
                 return true;
 
             }
@@ -78,6 +80,7 @@ public class MethodHandler {
 
                 if (!checkAccess(user)) return false;
                 if (!checkStates(user)) return false;
+                if (!checkSource(update)) return false;
                 return true;
 
             }
@@ -86,6 +89,7 @@ public class MethodHandler {
 
                 if (!checkAccess(user)) return false;
                 if (!checkStates(user)) return false;
+                if (!checkSource(update)) return false;
                 return true;
 
             }
@@ -94,6 +98,7 @@ public class MethodHandler {
 
                 if (!checkAccess(user)) return false;
                 if (!checkStates(user)) return false;
+                if (!checkSource(update)) return false;
                 return true;
 
             }
@@ -102,6 +107,7 @@ public class MethodHandler {
 
             if (!checkAccess(user)) return false;
             if (!checkStates(user)) return false;
+            if (!checkSource(update)) return false;
 
             // Regex имеет приоритет
             String regex = getStringValue("regex");
@@ -155,6 +161,53 @@ public class MethodHandler {
     private boolean checkAccess(AbstractBotUser user) throws Exception {
         boolean accessByUnknownUsers = getBooleanValue("accessByUnknownUsers");
         return user != null || accessByUnknownUsers;
+    }
+
+    private boolean checkSource(Update update) throws Exception {
+
+        // Получаем список строк из аннотации
+        SourceType[] sources = (SourceType[]) annotation.annotationType()
+                .getMethod("sources")
+                .invoke(annotation);
+
+        if (sources.length == 0) return true;
+
+        SourceType source = null;
+        if (update.hasMessage()) {
+            if (update.getMessage().isUserMessage()) {
+                source = SourceType.USER;
+            }else if (update.getMessage().isGroupMessage()) {
+                source = SourceType.GROUP;
+            }else if (update.getMessage().isSuperGroupMessage()) {
+                source = SourceType.SUPERGROUP;
+            }
+        }
+
+        if (update.hasCallbackQuery()) {
+            if (update.getCallbackQuery().getMessage().isUserMessage()) {
+                source = SourceType.USER;
+            }else if (update.getCallbackQuery().getMessage().isGroupMessage()) {
+                source = SourceType.GROUP;
+            }else if (update.getCallbackQuery().getMessage().isSuperGroupMessage()) {
+                source = SourceType.SUPERGROUP;
+            }
+        }
+
+        if (update.hasInlineQuery()) {
+            if (update.getInlineQuery().getChatType() == null) {
+                source = SourceType.USER;
+            } else if (update.getInlineQuery().getChatType().equals("sender")){
+                source = SourceType.USER;
+            }else if (update.getInlineQuery().getChatType().equals("private")){
+                source = SourceType.USER;
+            }else if (update.getInlineQuery().getChatType().equals("group")){
+                source = SourceType.GROUP;
+            }else if (update.getInlineQuery().getChatType().equals("supergroup")){
+                source = SourceType.SUPERGROUP;
+            }
+        }
+
+        return Arrays.asList(sources).contains(source);
     }
 
     private boolean checkStates(AbstractBotUser user) throws Exception {

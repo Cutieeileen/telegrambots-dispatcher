@@ -6,7 +6,7 @@
 
     <groupId>org.itburger</groupId>
     <artifactId>telegrambots-dispatcher</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 
     <name>TelegramBots Update Dispather</name>
     <url>https://github.com/Cutieeileen/telegrambots-dispatcher/</url>
